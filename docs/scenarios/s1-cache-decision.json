@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "id": "scenario-s1-cache",
+  "name": "S1·缓存决策复盘",
+  "viewport": {
+    "x": 48,
+    "y": 48,
+    "scale": 0.8
+  },
+  "nodes": [
+    {
+      "id": "s1-conv-old",
+      "type": "conversation",
+      "x": 80,
+      "y": 100,
+      "data": {
+        "sessionId": "demo-s1-cache-old",
+        "title": "缓存有效期讨论（10/18）",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标（首条用户消息）**：把 CDN 回源成本压下来，先定一个缓存有效期。\n\n**最近进展**：\n- **助手**：建议把价格缓存 TTL 设为 24 小时，回源成本大约能降一半。\n- **用户**：先按 24 小时上线，观察一周。\n- **助手**：提醒要关注价格陈旧问题，但当时没有明确的新鲜度指标。",
+        "digestAt": 1792500000000,
+        "digestStatus": "ready",
+        "digestError": "",
+        "messageCount": 8
+      }
+    },
+    {
+      "id": "s1-conv-new",
+      "type": "conversation",
+      "x": 80,
+      "y": 380,
+      "data": {
+        "sessionId": "demo-s1-cache-new",
+        "title": "缓存复审（10/20）",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标（首条用户消息）**：客户反馈价格陈旧，重新评估缓存有效期。\n\n**最近进展**：\n- **用户**：客户看到 15 分钟前的旧价格，已经投诉。\n- **助手**：建议改为 2 小时，并加 stale-while-revalidate。\n- **用户**：评审材料先按 2 小时方案准备，最终决定还没定。",
+        "digestAt": 1792500000000,
+        "digestStatus": "ready",
+        "digestError": "",
+        "messageCount": 6
+      }
+    },
+    {
+      "id": "s1-file-req",
+      "type": "file",
+      "x": 80,
+      "y": 660,
+      "data": {
+        "path": "F:\\demo\\docs\\scenarios\\fixtures\\cache-requirements.md",
+        "name": "cache-requirements.md",
+        "includeMode": "inline",
+        "content": "# 缓存方案需求（合成）\n\n## 必须满足\n\n- 价格类数据的 P95 新鲜度 ≤ 10 分钟。\n- 缓存回源成本不得超过当前方案的 120%（具体金额未提供）。\n- 必须支持灰度发布和 5 分钟内回滚。\n\n## 背景\n\n- 旧方案为了降低回源成本，把 TTL 设为 24 小时。\n- 10/20 客户反馈价格最多可能陈旧 15 分钟。\n- 当前没有提供峰值 QPS、缓存命中率和回源成本明细。\n\n## 待确认\n\n- 是否允许 stale-while-revalidate？\n- 价格数据能否按品类设置不同 TTL？\n",
+        "contentAt": 1792500000000,
+        "contentStatus": "ready",
+        "contentError": "",
+        "size": 259
+      }
+    },
+    {
+      "id": "s1-prompt",
+      "type": "prompt",
+      "x": 430,
+      "y": 380,
+      "data": {
+        "text": "输出一页决策复盘：先用表格列出两种缓存主张（主张、来源、时间、依据），再指出它们与需求文件的冲突，然后给出推荐方案及前提，最后列出 3 个需要用户确认的问题。每个判断标注来源编号；不要自行宣布最终决定。"
+      }
+    },
+    {
+      "id": "s1-chat",
+      "type": "chat",
+      "x": 800,
+      "y": 300,
+      "data": {
+        "title": "新对话·缓存决策复盘",
+        "instruction": "你是产品决策评审助手。不要替用户拍板；冲突必须并列呈现，引用来源编号，资料不足要明确说。",
+        "workspaceId": "",
+        "status": "idle",
+        "resultSessionId": "",
+        "resultAt": 0,
+        "lastContextChars": 0,
+        "lastTokens": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "s1-e1",
+      "from": "s1-conv-old",
+      "to": "s1-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 1
+    },
+    {
+      "id": "s1-e2",
+      "from": "s1-conv-new",
+      "to": "s1-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 2
+    },
+    {
+      "id": "s1-e3",
+      "from": "s1-file-req",
+      "to": "s1-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "id": "s1-e4",
+      "from": "s1-prompt",
+      "to": "s1-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 4
+    }
+  ],
+  "createdAt": 1792500000000,
+  "updatedAt": 1792500000000
+}

@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "id": "scenario-s3-design",
+  "name": "S3·V2 方案评审",
+  "viewport": {
+    "x": 48,
+    "y": 48,
+    "scale": 0.8
+  },
+  "nodes": [
+    {
+      "id": "s3-conv",
+      "type": "conversation",
+      "x": 80,
+      "y": 100,
+      "data": {
+        "sessionId": "demo-s3-design",
+        "title": "画布 V2 范围讨论",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标**：讨论画布 V2 的范围和约束。\n\n**最近进展**：\n- **用户**：V2 想做多画布、结构化记忆和冲突审阅，但只有两周。\n- **助手**：建议保持客户端插件，不新增 Host 权限；先做结构化记忆和预览，不急着多画布。\n- **用户**：预览不能删，评审前必须能看上下文。",
+        "digestAt": 1792500000000,
+        "digestStatus": "ready",
+        "digestError": "",
+        "messageCount": 6
+      }
+    },
+    {
+      "id": "s3-file-draft",
+      "type": "file",
+      "x": 80,
+      "y": 380,
+      "data": {
+        "path": "F:\\demo\\docs\\scenarios\\fixtures\\design-draft-v2.md",
+        "name": "design-draft-v2.md",
+        "includeMode": "inline",
+        "content": "# 画布 V2 草案（合成）\n\n## 目标\n\n- 支持多画布。\n- 引入结构化记忆和冲突审阅。\n- 保持客户端插件形态。\n\n## 草案\n\n1. 在 Host 侧新增 SQLite 记忆库，保存所有画布的记忆。\n2. 冲突由系统按“最新时间戳优先”自动裁决。\n3. 为了简化交互，V2 移除上下文预览，直接创建对话。\n4. 多画布与结构化记忆都在两周内完成。\n5. 画布 JSON 不提供版本迁移，旧数据由用户自行导出。\n\n## 备注\n\n- 当前没有评估 Host 存储的权限和迁移成本。\n",
+        "contentAt": 1792500000000,
+        "contentStatus": "ready",
+        "contentError": "",
+        "size": 244
+      }
+    },
+    {
+      "id": "s3-file-test",
+      "type": "file",
+      "x": 80,
+      "y": 660,
+      "data": {
+        "path": "F:\\demo\\docs\\scenarios\\fixtures\\test-plan-v2.md",
+        "name": "test-plan-v2.md",
+        "includeMode": "inline",
+        "content": "# V2 测试计划（合成）\n\n- 导入一个正常画布并预览。\n- 创建一个新对话并检查输入框。\n- 刷新页面，确认画布还在。\n\n（未覆盖：多画布、冲突资料、长文本、导入清洗、权限、迁移。）\n",
+        "contentAt": 1792500000000,
+        "contentStatus": "ready",
+        "contentError": "",
+        "size": 94
+      }
+    },
+    {
+      "id": "s3-prompt",
+      "type": "prompt",
+      "x": 430,
+      "y": 380,
+      "data": {
+        "text": "评审这份 V2 草案：列出阻塞问题、风险、缺失信息和最小可执行修改。每条标注来源编号；不要重写全文；不要假设草案之外已经完成的工作。"
+      }
+    },
+    {
+      "id": "s3-chat",
+      "type": "chat",
+      "x": 800,
+      "y": 300,
+      "data": {
+        "title": "新对话·V2 方案评审",
+        "instruction": "你是方案评审助手。优先指出阻塞问题；区分缺失信息和风险；给出最小修改，不要重写全文。",
+        "workspaceId": "",
+        "status": "idle",
+        "resultSessionId": "",
+        "resultAt": 0,
+        "lastContextChars": 0,
+        "lastTokens": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "s3-e1",
+      "from": "s3-conv",
+      "to": "s3-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 1
+    },
+    {
+      "id": "s3-e2",
+      "from": "s3-file-draft",
+      "to": "s3-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 2
+    },
+    {
+      "id": "s3-e3",
+      "from": "s3-file-test",
+      "to": "s3-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "id": "s3-e4",
+      "from": "s3-prompt",
+      "to": "s3-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 4
+    }
+  ],
+  "createdAt": 1792500000000,
+  "updatedAt": 1792500000000
+}

@@ -1,0 +1,11 @@
+node_modules/
+.test/
+.test-audit/
+.backup-*/
+*.log
+.DS_Store
+Thumbs.db
+docs/scenarios/results/raw/
+
+.demo/
+dist/

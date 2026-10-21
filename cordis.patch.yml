@@ -1,0 +1,5 @@
+# dsh-context-canvas bundle patch
+# Inserts the plugin row into the profile. The row id is also the Client module id.
+- insert:
+    - id: dsh-context-canvas
+      name: dsh-context-canvas

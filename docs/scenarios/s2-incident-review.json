@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "id": "scenario-s2-incident",
+  "name": "S2·线上 502 复盘",
+  "viewport": {
+    "x": 48,
+    "y": 48,
+    "scale": 0.8
+  },
+  "nodes": [
+    {
+      "id": "s2-conv-alert",
+      "type": "conversation",
+      "x": 80,
+      "y": 100,
+      "data": {
+        "sessionId": "demo-s2-alert",
+        "title": "14:00 502 告警",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标**：定位 14:00 前后 edge 502 的原因。\n\n**最近进展**：\n- **用户**：14:03 开始大量 502，14:10 回滚后还有一段时间异常。\n- **助手**：回滚把 502 从 12% 降到 3%，但没有归零，说明回滚只是缓解。\n- **助手**：初步怀疑证书，但当时还没有确认。",
+        "digestAt": 1792500000000,
+        "digestStatus": "ready",
+        "digestError": "",
+        "messageCount": 7
+      }
+    },
+    {
+      "id": "s2-conv-cert",
+      "type": "conversation",
+      "x": 80,
+      "y": 380,
+      "data": {
+        "sessionId": "demo-s2-cert",
+        "title": "证书链排查",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标**：核查证书链和代理。\n\n**最近进展**：\n- **助手**：edge-3 的证书链缺少中间证书或根证书，TLS 校验失败。\n- **助手**：代理层对上游证书做了替换，链不完整时握手失败。\n- **助手**：14:16 补齐链后，502 降到 0.1%。\n- **用户**：确认修复，但还没有做自动化校验。",
+        "digestAt": 1792500000000,
+        "digestStatus": "ready",
+        "digestError": "",
+        "messageCount": 9
+      }
+    },
+    {
+      "id": "s2-file-log",
+      "type": "file",
+      "x": 80,
+      "y": 660,
+      "data": {
+        "path": "F:\\demo\\docs\\scenarios\\fixtures\\incident-2026-10-19.log",
+        "name": "incident-2026-10-19.log",
+        "includeMode": "inline",
+        "content": "2026-10-19T14:03:12+08:00 edge-3 502 upstream TLS handshake failed\n2026-10-19T14:04:01+08:00 edge-1 502 rate 8%\n2026-10-19T14:05:33+08:00 edge-3 tls: failed to verify certificate: x509: certificate signed by unknown authority\n2026-10-19T14:09:40+08:00 deploy rollback web@2026.10.19-3 -> web@2026.10.18-7\n2026-10-19T14:10:05+08:00 edge pool 502 rate 12%\n2026-10-19T14:16:22+08:00 edge-3 certificate chain updated (intermediate + root)\n2026-10-19T14:18:10+08:00 edge pool 502 rate 0.1%\n2026-10-19T14:20:00+08:00 no new 502 alerts for 2 minutes\n",
+        "contentAt": 1792500000000,
+        "contentStatus": "ready",
+        "contentError": "",
+        "size": 543
+      }
+    },
+    {
+      "id": "s2-prompt",
+      "type": "prompt",
+      "x": 430,
+      "y": 380,
+      "data": {
+        "text": "输出事故复盘：按时间线列事实、根因、证据、影响范围、行动项。明确区分已证实事实和推测；引用来源编号；没有数据的影响范围写“未知”，不要编造用户数。"
+      }
+    },
+    {
+      "id": "s2-chat",
+      "type": "chat",
+      "x": 800,
+      "y": 300,
+      "data": {
+        "title": "新对话·502 复盘",
+        "instruction": "你是事故复盘助手。先列时间线，再给根因和证据；事实与推测分开；没有数据的影响写未知。",
+        "workspaceId": "",
+        "status": "idle",
+        "resultSessionId": "",
+        "resultAt": 0,
+        "lastContextChars": 0,
+        "lastTokens": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "s2-e1",
+      "from": "s2-conv-alert",
+      "to": "s2-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 1
+    },
+    {
+      "id": "s2-e2",
+      "from": "s2-conv-cert",
+      "to": "s2-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 2
+    },
+    {
+      "id": "s2-e3",
+      "from": "s2-file-log",
+      "to": "s2-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "id": "s2-e4",
+      "from": "s2-prompt",
+      "to": "s2-chat",
+      "kind": "context",
+      "enabled": true,
+      "order": 4
+    }
+  ],
+  "createdAt": 1792500000000,
+  "updatedAt": 1792500000000
+}

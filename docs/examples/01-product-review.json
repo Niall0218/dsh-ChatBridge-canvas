@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "id": "canvas-example-01",
+  "name": "实例01·产品评审上下文",
+  "viewport": { "x": 48, "y": 48, "scale": 0.9 },
+  "nodes": [
+    {
+      "id": "conv-product",
+      "type": "conversation",
+      "x": 80,
+      "y": 100,
+      "data": {
+        "sessionId": "demo-session-product",
+        "title": "产品需求讨论（示例）",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标（首条用户消息）**：确定上下文画布第一版的产品评审流程。\n\n**最近进展**：\n- **用户**：希望把多轮讨论、规范文件和评审要求放在同一个新对话里。\n- **助手**：建议先用可审阅的上下文编排闭环，不做自动冲突裁决。",
+        "messageCount": 8,
+        "digestAt": 1792500000000
+      }
+    },
+    {
+      "id": "conv-engineering",
+      "type": "conversation",
+      "x": 80,
+      "y": 360,
+      "data": {
+        "sessionId": "demo-session-engineering",
+        "title": "技术方案评估（示例）",
+        "cwd": "F:\\demo",
+        "includeMode": "digest_excerpts",
+        "digest": "**目标（首条用户消息）**：评估画布上下文编译器的可靠性。\n\n**最近进展**：\n- **助手**：来源按 order 排序，禁用来源不会进入正文。\n- **助手**：文件引用和文件内联需要在预览中明确区分。\n\n**关键原文片段**：\n> 如果资料不足，应把缺口暴露给新对话，而不是替用户猜测。",
+        "messageCount": 6,
+        "digestAt": 1792500001000
+      }
+    },
+    {
+      "id": "file-spec",
+      "type": "file",
+      "x": 80,
+      "y": 620,
+      "data": {
+        "path": "F:\\demo\\docs\\examples\\context-spec.md",
+        "name": "context-spec.md",
+        "includeMode": "inline",
+        "content": "# 上下文评审目标\n\n这是一份用于测试文件节点“内联文本”模式的合成规范。它包含一个明确的目标、几个已确认事实和一个待决问题。\n\n## 已确认事实\n\n- 第一版画布把来源按连线顺序编译。\n- 文件可以选择内联，也可以只引用路径。\n- 新对话创建前应先检查上下文预览。\n\n## 待决问题\n\n- 评审输出是否需要同时给出风险等级和下一步动作？",
+        "contentAt": 1792500002000,
+        "size": 420
+      }
+    },
+    {
+      "id": "prompt-review",
+      "type": "prompt",
+      "x": 390,
+      "y": 620,
+      "data": {
+        "text": "请生成一份产品评审提纲：先复述目标、事实、决定和待决问题；再指出两段历史讨论之间是否存在冲突；最后给出需要用户确认的三项问题。每个判断都标注来源编号。"
+      }
+    },
+    {
+      "id": "chat-review",
+      "type": "chat",
+      "x": 760,
+      "y": 300,
+      "data": {
+        "title": "新对话·产品评审",
+        "instruction": "你是产品评审助手。输出要可执行，遇到冲突先并列呈现，不要自行裁决。",
+        "workspaceId": "",
+        "status": "idle",
+        "resultSessionId": ""
+      }
+    }
+  ],
+  "edges": [
+    { "id": "edge-product", "from": "conv-product", "to": "chat-review", "kind": "context", "enabled": true, "order": 1 },
+    { "id": "edge-engineering", "from": "conv-engineering", "to": "chat-review", "kind": "context", "enabled": true, "order": 2 },
+    { "id": "edge-spec", "from": "file-spec", "to": "chat-review", "kind": "context", "enabled": true, "order": 3 },
+    { "id": "edge-prompt", "from": "prompt-review", "to": "chat-review", "kind": "context", "enabled": true, "order": 4 }
+  ]
+}

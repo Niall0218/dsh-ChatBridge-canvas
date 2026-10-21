@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "id": "canvas-example-02",
+  "name": "实例02·冲突资料审阅",
+  "viewport": { "x": 48, "y": 48, "scale": 1 },
+  "nodes": [
+    {
+      "id": "conv-a",
+      "type": "conversation",
+      "x": 80,
+      "y": 120,
+      "data": {
+        "sessionId": "demo-session-a",
+        "title": "旧方案决定（示例）",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标（首条用户消息）**：确定缓存有效期。\n\n**最近进展**：\n- **助手**：方案 A 将缓存有效期设为 24 小时。\n- **用户**：上线前按 24 小时方案准备。",
+        "messageCount": 4
+      }
+    },
+    {
+      "id": "conv-b",
+      "type": "conversation",
+      "x": 80,
+      "y": 400,
+      "data": {
+        "sessionId": "demo-session-b",
+        "title": "最新方案决定（示例）",
+        "cwd": "F:\\demo",
+        "includeMode": "digest",
+        "digest": "**目标（首条用户消息）**：重新评估缓存有效期。\n\n**最近进展**：\n- **助手**：为降低陈旧数据风险，建议改为 2 小时。\n- **用户**：评审材料按 2 小时方案准备。",
+        "messageCount": 5
+      }
+    },
+    {
+      "id": "prompt-conflict",
+      "type": "prompt",
+      "x": 390,
+      "y": 640,
+      "data": {
+        "text": "把冲突整理成表格，列出来源、主张、时间和需要确认的最终决定。不要假设最新方案一定正确。"
+      }
+    },
+    {
+      "id": "chat-conflict",
+      "type": "chat",
+      "x": 760,
+      "y": 300,
+      "data": {
+        "title": "新对话·冲突审阅",
+        "instruction": "先列出冲突，再提出确认问题。",
+        "workspaceId": "",
+        "status": "idle",
+        "resultSessionId": ""
+      }
+    }
+  ],
+  "edges": [
+    { "id": "edge-a", "from": "conv-a", "to": "chat-conflict", "kind": "context", "enabled": true, "order": 1 },
+    { "id": "edge-b", "from": "conv-b", "to": "chat-conflict", "kind": "context", "enabled": true, "order": 2 },
+    { "id": "edge-conflict-prompt", "from": "prompt-conflict", "to": "chat-conflict", "kind": "context", "enabled": true, "order": 3 }
+  ]
+}

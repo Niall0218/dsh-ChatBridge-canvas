@@ -1,0 +1,20 @@
+{
+  "version": 999,
+  "id": "canvas-example-04",
+  "name": "实例04·导入清洗边界",
+  "viewport": { "x": "bad", "y": null, "scale": 99 },
+  "nodes": [
+    { "id": "valid-chat", "type": "chat", "x": 600, "y": 200, "data": { "title": "脏数据测试目标" } },
+    { "id": "duplicate", "type": "prompt", "x": 80, "y": 100, "data": { "text": "保留第一份。" } },
+    { "id": "duplicate", "type": "prompt", "x": 80, "y": 300, "data": { "text": "这份应因重复 id 被丢弃。" } },
+    { "id": "unknown", "type": "alien", "x": "not-a-number", "y": 400, "data": { "title": "未知节点类型会被归一化" } },
+    { "id": "empty-prompt", "type": "prompt", "x": 80, "y": 500, "data": { "text": "" } }
+  ],
+  "edges": [
+    { "id": "edge-valid", "from": "duplicate", "to": "valid-chat", "enabled": true, "order": 2 },
+    { "id": "edge-valid-duplicate", "from": "duplicate", "to": "valid-chat", "enabled": true, "order": 3 },
+    { "id": "edge-unknown", "from": "unknown", "to": "valid-chat", "enabled": false, "order": 1 },
+    { "id": "edge-missing", "from": "missing", "to": "valid-chat", "enabled": true, "order": 4 },
+    { "id": "edge-self", "from": "valid-chat", "to": "valid-chat", "enabled": true, "order": 5 }
+  ]
+}

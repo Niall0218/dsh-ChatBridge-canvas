@@ -1,0 +1,4 @@
+* text=auto
+client.js text eol=lf
+src/* text eol=lf
+tests/* text eol=lf
